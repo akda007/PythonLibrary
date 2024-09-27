@@ -1,3 +1,5 @@
 .venv
 exports
 database
+__pycache__
+.idea

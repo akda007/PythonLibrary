@@ -2,7 +2,7 @@ from models import Book, db
 from playhouse.sqliteq import *
 import pandas as pd
 import os
-
+from datetime import datetime
 
 def create_book(title: str, author: str, price: float, year: int):
     book = Book.create(title=title, author=author, price=price, pub_year=year)
@@ -48,8 +48,8 @@ def remove_book(book_id: int):
     Book.delete_by_id(book_id)
 
 
-def export_to_csv(filename: str):
-    filename = filename.replace(".csv", "")
+def export_to_csv():
+    filename = datetime.today().strftime('%d-%m-%Y')
     books = get_books()
 
     df = pd.DataFrame(books)
@@ -62,9 +62,14 @@ def export_to_csv(filename: str):
         last_file = files[-1]
         ending = last_file.split("_")[-1]
         num = int(ending.split(".")[0])
+    
+    name = f"./exports/{filename}_{num + 1}.csv"
 
-    df.to_csv(f"./exports/{filename}_{num + 1}.csv", index=False, sep=';')
+    df.to_csv(name, index=False, sep=';')
 
-    if len(files) > 5:
+    if len(files) >= 5:
         os.remove(f"./exports/{files[0]}")
+
+
+    return name
 

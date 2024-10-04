@@ -1,6 +1,7 @@
 from config import config
 from controller import *
 import inquirer
+from tabulate import tabulate
 import re
 
 
@@ -8,14 +9,14 @@ def menu():
 
     questions = [
       inquirer.List('value',
-                    message="What size do you need?",
+                    message="Select a option:",
                     choices=[
                         'add  new book',
                         'show all registered books',
                         'Update the price of a book',
                         'remove a book',
                         'Search books by author',
-                        'File handling',
+                        'Export database',
                         'close'
                     ],
                 ),
@@ -41,9 +42,9 @@ if __name__ == "__main__":
 
         elif choice == 'show all registered books':
             books = get_books()
-            for book in books:
-                print(book)
 
+            rows = [x.values() for x in books]
+            print(tabulate(rows, headers=["Id", "Title", "Author", "Price", "Pub Year"]))
 
 
         elif choice == 'Update the price of a book':
@@ -62,45 +63,17 @@ if __name__ == "__main__":
         elif choice == 'Search books by author':
             author = input("Author: ")
             books_name = get_books(author)
-            for book in books_name:
-                print(book)
 
-            print("Search books by author...")
+            rows = [x.values() for x in books_name]
+            print(tabulate(rows, headers=["Id", "Title", "Author", "Price", "Pub Year"]))
 
-        elif choice == 'File handling':
-            export_to_csv("test")
-            print("File handling...")
+        elif choice == 'Export database':
+            file = export_to_csv()
+            print(f'Database exported to: {file}')
 
 
         elif choice == 'close':
             print("Saindo do programa...")
             break
 
-        input ("press enter to continue...")
-
-   # create_book("Livro", "Joao", 10.0, 1999)
-    #create_book("Livro2", "Joao", 12.0, 2009)
-    #create_book("Livro3", "Pedro", 14.0, 2077)
-
-    #books = get_books()
-    #joao_books = get_books("Joao")
-
-    #print("Livros:")
-    #print(books)
-
-    #print("Livros do joao:")
-    #print(joao_books)
-
-    #remove_book(books[0]["id"])
-    #update_price(books[1]["id"], 555.3)
-    #books = get_books()
-    #print("Livro (new list):")
-    #print(books)
-
-    #export_to_csv("test")
-
-
-
-
-
-
+        input("\n\npress enter to continue...")

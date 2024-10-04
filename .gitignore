@@ -3,3 +3,4 @@ exports
 database
 __pycache__
 .idea
+backups
